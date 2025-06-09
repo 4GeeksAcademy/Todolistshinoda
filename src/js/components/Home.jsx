@@ -1,28 +1,62 @@
-import React from "react";
+import React, { useState } from "react";
+import "../../styles/index.css";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
-
-//create your first component
 const Home = () => {
-	return (
-		<div className="text-center">
-            
+  const [task, setTask] = useState("");
+  const [todos, setTodos] = useState([
+    "Hacer la cama",
+    "Lavar manos",
+    "Comer",
+    "Sacar a pasear al perro",
+  ]);
 
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
-	);
+  const addTask = (e) => {
+    e.preventDefault();
+    if (task.trim() !== "") {
+      setTodos([...todos, task.trim()]);
+      setTask("");
+    }
+  };
+
+  const removeTask = (indexToRemove) => {
+    setTodos(todos.filter((_, index) => index !== indexToRemove));
+  };
+
+  return (
+    <div className="container d-flex flex-column align-items-center justify-content-center min-vh-100 bg-light">
+      <h1 className="display-1 text-muted mb-4 shinoda-title">ShinodaTodolist</h1>
+      <div className="card shadow-sm w-100" style={{ maxWidth: "600px" }}>
+        <form onSubmit={addTask}>
+          <input
+            type="text"
+            className="form-control border-0 border-bottom rounded-0"
+            placeholder="¿Que necesitas hacer ?"
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
+          />
+        </form>
+        <ul className="list-group list-group-flush">
+          {todos.map((item, index) => (
+            <li
+              key={index}
+              className="list-group-item d-flex justify-content-between align-items-center"
+            >
+              {item}
+              <button
+                className="btn btn-sm btn-outline-danger"
+                onClick={() => removeTask(index)}
+              >
+                &times;
+              </button>
+            </li>
+          ))}
+          <li className="list-group-item text-muted small">
+            {todos.length} item{todos.length !== 1 ? "s" : ""} left
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
 };
 
 export default Home;
